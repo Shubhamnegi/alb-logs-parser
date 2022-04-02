@@ -16,7 +16,7 @@ source ./venv/bin/activate
 python -m pip install -r requirement.txt
 ```
 
-Create a bash file to source env
+Create a bash file to source env. You can also use any other method to push env variable. 
 ```
 touch cred.bash
 echo "export INFLUX_DB_HOST=repalce_with_url" >> cred.bash
