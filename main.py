@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # coding=utf8
 #
-# AUTHOR: Jardel Weyrich <jweyrich at gmail dot com>, shubham16negi@gmail.com :D
+# AUTHOR: shubham negi <shubham16negi@gmail.com>
 # Goal: To parse alb logs and push to influx db for analyzing
 #
-from __future__ import print_function
-# import json
+
+from ast import arg
 import re, sys
 import requests
 import os
 import maya
 from urllib.parse import parse_qsl, urlencode, urlparse
+import argparse
+import glob
 
 
 INFLUX_DB_HOST = os.getenv("INFLUX_DB_HOST")
@@ -18,6 +20,7 @@ INFLUX_DB_USER = os.getenv("INFLUX_DB_USER")
 INFLUX_DB_PASSWORD = os.getenv("INFLUX_DB_PASSWORD")
 
 def parse_alb_log_file(file_path):
+	print(f"parsing logs at {file_path}")
 	fields = [
 		"type",
 		"timestamp",
@@ -55,6 +58,7 @@ def parse_alb_log_file(file_path):
 
 	with open(file_path, 'r') as file:
 		for line in file:
+			print(line)
 			logDict = {}
 			matches = re.search(regex, line)
 			if matches:
@@ -112,6 +116,27 @@ def push_to_influx(log):
 
 
 if __name__ == '__main__':
-	if len(sys.argv) != 2:
-		sys.exit("usage: %s <log_file_path>" % sys.argv[0])
-	parse_alb_log_file(sys.argv[1])
+	parser = argparse.ArgumentParser(description=f"To parse alb logs and push to influx at {INFLUX_DB_HOST}",prog='PROG',usage=f"{sys.argv[0]} --file file_name")
+	parser.add_argument('-d','--dir', help='Logs directory Example: --dir log dir for logs')
+	parser.add_argument('-f','--file', help='Log file path Example: --file file_path')
+	args = parser.parse_args()
+	
+	if len(sys.argv) < 3:
+		sys.exit(parser.print_help())
+	
+	if (args.dir != None):
+		# diretory provived, will be parsing directory and searching for logs		
+		try:
+			files = os.listdir(args.dir)
+			for f in files:
+				filepath = f"{args.dir}/{f}"
+				parse_alb_log_file(filepath)
+		except NotADirectoryError as err:
+			print(f"Invalid directory |  Error: {err}")
+		except BaseException as err:
+			print(f"Error: {err}")
+
+
+	else:
+		# file path provided will be parsing file directly		
+		parse_alb_log_file(args.file)		

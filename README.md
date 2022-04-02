@@ -36,7 +36,11 @@ gzip -dr logs # unzip all logs
 Send logs
 You can use xargs to list file name and pass directly to main file. Example for 1 log file is below
 ```
-python main log/file_name.log
+# To parse logs in a directory
+python main.py -d ./logs/
+
+# To parse one file
+python main.py -f ./logs/file.log
 ```
 
 ## Grafan Dashboard
