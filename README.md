@@ -44,4 +44,8 @@ python main.py -f ./logs/file.log
 ```
 
 ## Grafan Dashboard
-import grafana_dashboard.json to create dashboard on grafa
+import grafana_dashboard.json to create dashboard on grafana
+![alt text](./screenshots/Screenshot%202022-03-27%20at%202.09.07%20PM.png)
+![alt text](./screenshots/Screenshot%202022-03-27%20at%202.09.13%20PM.png)
+![alt text](./screenshots/Screenshot%202022-03-27%20at%202.09.24%20PM.png)
+![alt text](./screenshots/Screenshot%202022-03-27%20at%202.09.33%20PM.png)
