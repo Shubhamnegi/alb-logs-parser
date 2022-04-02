@@ -1,5 +1,11 @@
-# Installation
+# Objective
+To push alb log to influxdb. Influxdb data can be used to plot charts on granana, which allows easy analysis of request patterna and create alerts.
 
+# Open points
+- Can be modified to work and lambda function. On every s3 write of alb log lambda can be triggered to process log and push to influx. This will allow near real time data for request analysis.
+
+
+# Installation
 
 ```
 python3 -m pip install virtualenv
