@@ -26,6 +26,11 @@ echo "export INFLUX_DB_PASSWORD=replace_with_password" >> cred.bash
 source cred.bash
 ```
 
+## Lambda handler
+ - Create new lambda function with privilages to read S3 bucket
+ - Use Trigger to get notified whenever a new s3 log file is written bucke
+ - Update Env for influx host and credentials 
+
 Download logs
 ```
 mkdir logs
