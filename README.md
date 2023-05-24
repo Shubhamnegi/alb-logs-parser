@@ -1,9 +1,8 @@
 # Objective
-To push alb log to influxdb. Influxdb data can be used to plot charts on granana, which allows easy analysis of request patterna and create alerts.
-
-# Open points
-- Can be modified to work and lambda function. On every s3 write of alb log lambda can be triggered to process log and push to influx. This will allow near real time data for request analysis.
-
+- To pull logs from s3
+- Parse logs from s3
+- Push logs to new destination
+- analyze logs from destination
 
 # Installation
 
@@ -16,6 +15,7 @@ source ./venv/bin/activate
 python -m pip install -r requirement.txt
 ```
 
+For Influx as destination
 Create a bash file to source env. You can also use any other method to push env variable. 
 ```
 touch cred.bash
@@ -48,6 +48,11 @@ python main.py -f ./logs/file.log
  - Create new lambda function with privilages to read S3 bucket
  - Use Trigger to get notified whenever a new s3 log file is written bucke
  - Update Env for influx host and credentials 
+
+## SQS Support 
+- Add trigger from s3 to sqs
+- Consumer listen queue
+- Push to destination based on requirement 
 
 
 ## Grafan Dashboard

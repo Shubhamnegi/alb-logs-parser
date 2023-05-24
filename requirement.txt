@@ -1,2 +1,3 @@
-requests
-maya
+requests==2.27.1
+maya==0.6.1
+boto3==1.23.10
