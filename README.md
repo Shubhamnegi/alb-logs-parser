@@ -54,6 +54,20 @@ python main.py -f ./logs/file.log
 - Consumer listen queue
 - Push to destination based on requirement 
 
+### Required ENV
+###  For SQS Support
+QUEUE_URL
+AWS_ACCESS_KEY
+AWS_SECRET_KEY
+AWS_REGION
+
+### For Influxdb Support
+
+INFLUX_DB_HOST
+INFLUX_DB_USER
+INFLUX_DB_PASSWORD
+
+
 
 ## Grafan Dashboard
 import grafana_dashboard.json to create dashboard on grafana
