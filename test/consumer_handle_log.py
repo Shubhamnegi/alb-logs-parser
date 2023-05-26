@@ -5,6 +5,7 @@ import os
 import logging
 from pathlib import Path
 from util.albparser import parse_alb_log_line
+from destinations.log import push
 
 
 from util.LogsConsumer import LogsConsumer
@@ -62,12 +63,9 @@ class LogsConsumerTestCase(unittest.TestCase):
         for line in bucket_data:
             parsed_line = parse_alb_log_line(
                 line.decode('utf-8'))
-            logging.info(parsed_line)
             for field in self.required_fields:
                 assert(field in parsed_line,True)
                 assert(parsed_line[field]!="",True)
-                
-
-        
-
-  
+            push(parsed_line)    
+    
+	

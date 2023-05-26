@@ -3,8 +3,12 @@ import logging
 import json
 from util.s3helper import read_from_bucket
 from util.albparser import parse_alb_log_line
+from destinations.DestinationHandler import DestinationHandler
 
 class LogsConsumer(ABSConsumer):
+    
+    def set_destination(self,destination_handler:DestinationHandler):
+        self.destination_handler  = destination_handler
 
     def to_json(self,payload):        
         return json.loads(payload)
@@ -38,5 +42,6 @@ class LogsConsumer(ABSConsumer):
         for line in bucket_data:
             parsed_line = parse_alb_log_line(
                 line.decode('utf-8'))
-            print(json.dumps(parsed_line))
+            self.destination_handler.push(parsed_line)
+            
             

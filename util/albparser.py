@@ -7,6 +7,9 @@ import json
 
 
 def parse_alb_log_line(line):
+	"""
+	returns dict of log
+	"""
 	fields = [
 		"type",
 		"timestamp",
@@ -59,8 +62,13 @@ def parse_datetime(timestamp):
 	# sample: 2022-03-18T23:57:23.204731Z
 	date_time_obj = maya.parse(timestamp).datetime()
 	return int(date_time_obj.timestamp()*1000)
-	
-	
+
+def replace_numeric_values(input_string, replacement='/#'):
+    # Regular expression pattern to match numeric values
+    pattern = r'\/[\d\.]+\b'    
+    # Replace numeric values with the specified replacement
+    replaced_string = re.sub(pattern, replacement, input_string)
+    return replaced_string
 
 
 def redact_qs(url):
@@ -72,6 +80,6 @@ def redact_qs(url):
 	# 	parsed_query[k]="#"
 	# redacted_query_string = urlencode(parsed_query)	
 	# redactedurl=f"{u.scheme}://{u.netloc}{u.path}?{redacted_query_string}"
-	redactedurl=f"{u.scheme}://{u.netloc}{u.path}"
+	redactedurl=f"{replace_numeric_values(u.path)}"
 	return redactedurl
 

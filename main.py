@@ -13,7 +13,7 @@ import os
 import argparse
 import logging
 from util.LogsConsumer import LogsConsumer
-import time
+from destinations.log import ConsoleDestinationHandler
 
 def parse_args():
     parser = argparse.ArgumentParser(description=f"To parse alb logs and push to destination",prog='PROG',usage=f"{sys.argv[0]} --file file_name")
@@ -55,6 +55,7 @@ if __name__ == '__main__':
         sys.exit(0)    
     logging.info('Starting consumers')
     c = LogsConsumer(os.getenv('QUEUE_URL'))
+    c.set_destination(ConsoleDestinationHandler)
     consumers.append(c)
     
     signal.signal(signal.SIGINT, signal_handler)        

@@ -20,7 +20,7 @@ sqs = boto3.client('sqs',
 
 class ABSConsumer():
     def __init__(self,queue_url):
-        self.queue_url = queue_url
+        self.queue_url = queue_url                
         self.enabled = False
         if queue_url== "" or queue_url == None:
             raise Exception("queue_url is required") 
@@ -66,9 +66,10 @@ class ABSConsumer():
                     sqs.delete_message(
                         QueueUrl=self.queue_url,
                         ReceiptHandle=message['ReceiptHandle']
-                    )
+                    )                    
             else:
                 # No messages received
                 logging.info('No messages available.')
                 time.sleep(60) # sleep for 60s
+                        
 
