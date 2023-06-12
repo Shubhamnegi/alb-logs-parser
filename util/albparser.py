@@ -53,11 +53,26 @@ def parse_alb_log_line(line):
 			logDict[field]=matches.group(i+1)
 		# check of data is properly parsed	
 		if(logDict.get('request_verb')!= None and logDict.get('request_verb') != ''):
+			logDict = fix_domain_name(logDict)
 			return logDict
 		else:
 			logging.error(f"error parsing log line {line}")
 			return None
-					
+
+def fix_domain_name(logDict):
+	domain_name = logDict.get('domain_name')
+	if (domain_name == None or domain_name!=''):
+		# domain name is null, we need to extract domain name using regex from request_url
+		request_url = logDict.get('request_url')
+		regex = r"http(s)?:\/\/([\w\-\.]+).+"
+		matches = re.search(regex, request_url)
+		if matches:
+			logDict['domain_name'] = matches[0]
+	return logDict	
+
+
+
+
 def parse_datetime(timestamp):
 	# sample: 2022-03-18T23:57:23.204731Z
 	date_time_obj = maya.parse(timestamp).datetime()
