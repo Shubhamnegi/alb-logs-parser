@@ -64,10 +64,11 @@ def fix_domain_name(logDict):
 	if (domain_name == None or domain_name!=''):
 		# domain name is null, we need to extract domain name using regex from request_url
 		request_url = logDict.get('request_url')
-		regex = r"http(s)?:\/\/([\w\-\.]+).+"
-		matches = re.search(regex, request_url)
+		regex = r"http(s)?:\/\/([\w\-\.]+).+" # carefull with the () group 1 is s and 2nd is domain
+		matches = re.search(regex, request_url)		
 		if matches:
-			logDict['domain_name'] = matches[0]
+			print(matches.groups)
+			logDict['domain_name'] = matches.group(2)
 	return logDict	
 
 
