@@ -5,7 +5,7 @@ import json
 import redis
 import re
 from util.ThreatCalculator import ThreatCalculator
-from util.helper import get_key_by_att, ipToCIDR
+from util.helper import get_key_by_att, ipToCIDR, getCountryFromIP
 
 
 def rateCalculator(log: dict, attribute: str, timeout: int):
@@ -25,5 +25,4 @@ def rateCalculator(log: dict, attribute: str, timeout: int):
         timeout = (int)(timeout)
         r.set(name=redis_key, value=current, ex=timeout)
     log[key] = current
-    print(log)
     return log

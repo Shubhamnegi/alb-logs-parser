@@ -3,6 +3,7 @@ import os
 from util.rateCalculator import rateCalculator
 import maxminddb
 from util.ThreatCalculator import ThreatCalculator
+from util.helper import getCountryFromIP
 
 
 class RateCalculatorTest():
@@ -49,17 +50,12 @@ class RateCalculatorTest():
             attribute = field.get('field_name')
             timeout = field.get('exp')
             cls.log = rateCalculator(cls.log, attribute, timeout)
-
+        cls.log['country_of_origin'] = getCountryFromIP(
+            cls.log.get('client_ip'))
         tc = ThreatCalculator(cls.log)
         threat_percentage = tc.threat_percentage()
+        print(cls.log)
         print(threat_percentage, "threat_percentage")
-
-    @classmethod
-    def getCountryFromIP(cls):
-        with maxminddb.open_database('database/dbip-country-lite-2023-07.mmdb') as reader:
-            res = reader.get('125.63.125.210')
-            res = res['country']['iso_code']
-            print(res)
 
 
 if __name__ == "__main__":

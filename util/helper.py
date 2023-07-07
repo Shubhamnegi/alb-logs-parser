@@ -1,4 +1,5 @@
 import re
+import maxminddb
 
 
 def get_key_by_att(log, attribute):
@@ -16,3 +17,10 @@ def ipToCIDR(ip):
     result = ip.rsplit(separator, 1)[0]
     result += '.0/24'
     return result
+
+
+def getCountryFromIP(ip):
+    with maxminddb.open_database('database/dbip-country-lite-2023-07.mmdb') as reader:
+        res = reader.get(ip)
+        res = res['country']['iso_code']
+        return res
