@@ -130,3 +130,5 @@ dmypy.json
 logs
 test/mock
 .vscode/
+
+database
