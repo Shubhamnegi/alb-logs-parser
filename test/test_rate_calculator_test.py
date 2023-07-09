@@ -1,12 +1,11 @@
 import json
-import os
-from util.rateCalculator import rateCalculator
-import maxminddb
+from util.RateCalculator import RateCalculator
 from util.ThreatCalculator import ThreatCalculator
-from util.helper import getCountryFromIP
+from util.helper import get_country_from_IP,get_field_for_rate_calulation,get_key_by_att,ip_to_CIDR
+import unittest
 
 
-class RateCalculatorTest():
+class TestRateCalculator(unittest.TestCase):
     sample_log = ''' 
     {
         "type": "https",
@@ -40,23 +39,39 @@ class RateCalculatorTest():
     }
     '''
 
-    log = json.loads(sample_log)
+    def pre_log_data(self):
+        self.log = json.loads(self.sample_log)
 
-    @classmethod
-    def calculate(cls):
-        data = os.getenv('attributes')
-        fields = json.loads(data)
+    
+    def test_calculate(self):        
+        self.pre_log_data()
+        fields = get_field_for_rate_calulation()
+        self.log['ip_cidr_24'] = ip_to_CIDR(self.log['client_ip'])        
+        assert self.log['ip_cidr_24'] == "112.215.18.0/24"
         for field in fields:
             attribute = field.get('field_name')
             timeout = field.get('exp')
-            cls.log = rateCalculator(cls.log, attribute, timeout)
-        cls.log['country_of_origin'] = getCountryFromIP(
-            cls.log.get('client_ip'))
-        tc = ThreatCalculator(cls.log)
-        threat_percentage = tc.threat_percentage()
-        print(cls.log)
+            key = get_key_by_att(self.log,attribute)
+            self.log[key] = RateCalculator.calculate(self.log, attribute, timeout)            
+            print(f"key: {key} value: {self.log[key]} ")
+            assert self.log[key] != None
+        
+                                
+    
+    def test_country_of_origin(self):
+        self.pre_log_data()
+        self.log['country_of_origin'] = get_country_from_IP(self.log.get('client_ip'))
+        print(f'country of origin: {self.log["country_of_origin"]}')
+
+        assert self.log['country_of_origin'] == "ID"
+
+    def test_threat_caculator(self):
+        self.pre_log_data()
+        self.log['ip_cidr_24'] = ip_to_CIDR(self.log['client_ip'])        
+        RateCalculator.process(self.log)
+
+        tc = ThreatCalculator(self.log)
+        threat_percentage = tc.calculate()
+        print(self.log)
         print(threat_percentage, "threat_percentage")
-
-
-if __name__ == "__main__":
-    RateCalculatorTest.calculate()
+        assert threat_percentage != None
