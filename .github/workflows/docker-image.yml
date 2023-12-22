@@ -19,4 +19,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: shubham16negi/alb-log-parser:$(date +%s)
+          tags: shubham16negi/alb-log-parser:latest
