@@ -42,6 +42,7 @@ class LogsConsumer(ABSConsumer):
         for line in bucket_data:
             parsed_line = parse_alb_log_line(
                 line.decode('utf-8'))
-            self.destination_handler.push(parsed_line)
+            if parsed_line != None:
+                self.destination_handler.push(parsed_line)
             
             
