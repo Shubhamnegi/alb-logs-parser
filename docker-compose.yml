@@ -1,0 +1,19 @@
+services:
+  svc:
+    build:
+      context: .
+      dockerfile: LocalDockerfile
+    command: python main.py
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - cache
+  cache:
+    platform: linux/x86_64
+    image: redis:latest
+    command: 'redis-server'
+    restart: always
+    ports:
+      - 6379:6379
